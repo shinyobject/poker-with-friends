@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Poker With Friends</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main>
+      <section class="panel join-panel" id="joinPanel">
+        <h1>Poker With Friends</h1>
+        <p>Texas Hold'em over the internet (MVP)</p>
+        <label>
+          Name
+          <input id="nameInput" placeholder="Your name" maxlength="20" />
+        </label>
+        <label>
+          Room ID
+          <input id="roomInput" placeholder="ROOM123" maxlength="8" />
+        </label>
+        <button id="joinButton">Join Room</button>
+      </section>
+
+      <section class="panel game-panel hidden" id="gamePanel">
+        <header>
+          <div>
+            <h2 id="roomLabel"></h2>
+            <p id="streetLabel">Waiting</p>
+          </div>
+          <button id="startHandButton">Start Hand</button>
+        </header>
+
+        <div class="table">
+          <div>
+            <strong>Community</strong>
+            <div id="communityCards" class="cards"></div>
+          </div>
+          <div>
+            <strong>Pot:</strong>
+            <span id="potLabel">0</span>
+          </div>
+        </div>
+
+        <div>
+          <strong>Players</strong>
+          <div id="playersList" class="players"></div>
+        </div>
+
+        <div>
+          <strong>Your Cards</strong>
+          <div id="myCards" class="cards"></div>
+        </div>
+
+        <div class="actions">
+          <button data-action="fold">Fold</button>
+          <button data-action="check">Check</button>
+          <button data-action="call">Call</button>
+          <input id="raiseInput" type="number" min="1" value="20" />
+          <button data-action="raise">Raise</button>
+        </div>
+
+        <div>
+          <strong>Table Log</strong>
+          <ul id="messages"></ul>
+        </div>
+      </section>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
