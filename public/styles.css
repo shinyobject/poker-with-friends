@@ -97,14 +97,17 @@ header {
 }
 
 .card {
-  min-width: 48px;
-  text-align: center;
+  width: 72px;
+  height: 102px;
   border-radius: 8px;
-  padding: 0.5rem 0.35rem;
-  background: #f8f8f8;
-  color: #121212;
-  font-weight: 700;
-  border: 1px solid #d8d8d8;
+  overflow: hidden;
+  display: inline-flex;
+}
+
+.card-face {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .players {
