@@ -112,10 +112,87 @@ function render() {
 }
 
 function cardEl(value) {
-  const span = document.createElement("span");
-  span.className = "card";
-  span.textContent = value;
-  return span;
+  const [rank, suit] = parseCard(value);
+  const color = suit === "D" || suit === "H" ? "#c21807" : "#111";
+  const wrapper = document.createElement("span");
+  wrapper.className = "card";
+  wrapper.innerHTML = cardSvg(rank, suit, color);
+  return wrapper;
+}
+
+function parseCard(value) {
+  const raw = String(value || "");
+  return [raw.slice(0, -1), raw.slice(-1)];
+}
+
+function cardSvg(rank, suit, color) {
+  const suitSymbol = suitToSymbol(suit);
+  const center = centerContent(rank, suitSymbol, color);
+  const cornerRank = rank === "T" ? "10" : rank;
+
+  return `
+    <svg class="card-face" viewBox="0 0 100 140" role="img" aria-label="${cornerRank} of ${suitName(
+      suit
+    )}">
+      <rect x="1" y="1" width="98" height="138" rx="10" ry="10" fill="#fff" stroke="#dadada" />
+      <g fill="${color}" font-family="'Times New Roman', serif" font-weight="700">
+        <text x="10" y="20" font-size="18">${cornerRank}</text>
+        <text x="10" y="36" font-size="16">${suitSymbol}</text>
+        <g transform="translate(100 140) rotate(180)">
+          <text x="10" y="20" font-size="18">${cornerRank}</text>
+          <text x="10" y="36" font-size="16">${suitSymbol}</text>
+        </g>
+      </g>
+      ${center}
+    </svg>
+  `;
+}
+
+function centerContent(rank, suitSymbol, color) {
+  const pipLayouts = {
+    A: [[50, 70]],
+    "2": [[50, 38], [50, 102]],
+    "3": [[50, 30], [50, 70], [50, 110]],
+    "4": [[30, 38], [70, 38], [30, 102], [70, 102]],
+    "5": [[30, 38], [70, 38], [50, 70], [30, 102], [70, 102]],
+    "6": [[30, 30], [70, 30], [30, 70], [70, 70], [30, 110], [70, 110]],
+    "7": [[30, 30], [70, 30], [50, 50], [30, 70], [70, 70], [30, 110], [70, 110]],
+    "8": [[30, 30], [70, 30], [30, 56], [70, 56], [30, 84], [70, 84], [30, 110], [70, 110]],
+    "9": [[30, 30], [70, 30], [30, 56], [70, 56], [50, 70], [30, 84], [70, 84], [30, 110], [70, 110]],
+    T: [
+      [30, 26],
+      [70, 26],
+      [30, 48],
+      [70, 48],
+      [30, 70],
+      [70, 70],
+      [30, 92],
+      [70, 92],
+      [30, 114],
+      [70, 114]
+    ]
+  };
+
+  if (rank === "J" || rank === "Q" || rank === "K") {
+    return `<g fill="${color}" text-anchor="middle" font-family="'Times New Roman', serif" font-weight="700">
+      <text x="50" y="72" font-size="38">${rank}</text>
+      <text x="50" y="98" font-size="26">${suitSymbol}</text>
+    </g>`;
+  }
+
+  const pips = pipLayouts[rank] || pipLayouts.A;
+  const size = rank === "A" ? 28 : 22;
+  return `<g fill="${color}" text-anchor="middle" font-size="${size}" font-family="'Times New Roman', serif">
+    ${pips.map(([x, y]) => `<text x="${x}" y="${y}">${suitSymbol}</text>`).join("")}
+  </g>`;
+}
+
+function suitToSymbol(suit) {
+  return { C: "♣", D: "♦", H: "♥", S: "♠" }[suit] || "?";
+}
+
+function suitName(suit) {
+  return { C: "clubs", D: "diamonds", H: "hearts", S: "spades" }[suit] || "unknown";
 }
 
 function titleCase(v) {
